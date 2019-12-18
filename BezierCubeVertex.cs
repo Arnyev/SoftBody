@@ -37,23 +37,23 @@ namespace SoftBody
 
             Position += Velocity * dt;
 
-            if (Position.X > Max)
-                Position.X = Max;
+            //if (Position.X > Max)
+            //    Position.X = Max;
 
-            if (Position.X < -Max)
-                Position.X = -Max;
+            //if (Position.X < -Max)
+            //    Position.X = -Max;
 
-            if (Position.Y > Max)
-                Position.Y = Max;
+            //if (Position.Y > Max)
+            //    Position.Y = Max;
 
-            if (Position.Y < -Max)
-                Position.Y = -Max;
+            //if (Position.Y < -Max)
+            //    Position.Y = -Max;
 
-            if (Position.Z > Max)
-                Position.Z = Max;
+            //if (Position.Z > Max)
+            //    Position.Z = Max;
 
-            if (Position.Z < -Max)
-                Position.Z = -Max;
+            //if (Position.Z < -Max)
+            //    Position.Z = -Max;
         }
 
         public Vertex ToVertex => new Vertex(Position);

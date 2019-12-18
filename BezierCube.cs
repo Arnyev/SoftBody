@@ -17,7 +17,7 @@ namespace SoftBody
         public static float DeformationConstant { get; set; } = 1;
 
 
-        const int SquareDivision = 12;
+        const int SquareDivision = 40;
         public readonly BezierCubeVertex[,,] bezierPoints = new BezierCubeVertex[4, 4, 4];
         private readonly List<Spring> springs = new List<Spring>();
 

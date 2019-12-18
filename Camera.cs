@@ -10,7 +10,7 @@ namespace SoftBody
 
         private readonly Control _control;
         private static readonly Vector3 Up = new Vector3(0, 1, 0);
-        private const float MovementSpeed = 4.0f;
+        private const float MovementSpeed = 20.0f;
         private const float MouseSensitivity = 0.0005f;
         private DateTime _lastComputationTime;
         private int _wPressed;

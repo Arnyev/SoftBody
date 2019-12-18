@@ -30,19 +30,19 @@ namespace SoftBody
             var elasticity = anyStatic ? ElasticityControl : Elasticity;
             var elasticForce = elasticity * (dist - StartingDistance);
 
-            var relativeVelocity = VertexA.Velocity - VertexB.Velocity;
-            var relativeVelocityInDir = Vector3.Dot(relativeVelocity, positionDiffNorm);// jeśli się zbliżają to dodatnie
-            var viscousForce = Viscosity * relativeVelocityInDir;
-            var force = elasticForce - viscousForce;
+            //var relativeVelocity = VertexA.Velocity - VertexB.Velocity;
+            //var relativeVelocityInDir = Vector3.Dot(relativeVelocity, positionDiffNorm);// jeśli się zbliżają to dodatnie
+            //var viscousForce = Viscosity * relativeVelocityInDir;
+            //var force = elasticForce - viscousForce;
 
-            VertexA.Acceleration += force / Mass * positionDiffNorm;
-            VertexB.Acceleration -= force / Mass * positionDiffNorm;
+            //VertexA.Acceleration += force / Mass * positionDiffNorm;
+            //VertexB.Acceleration -= force / Mass * positionDiffNorm;
 
-            //var elasticForceDir = elasticForce * positionDiffNorm;
-            //var viscousForceDirA = -Viscosity * VertexA.Velocity;
-            //var viscousForceDirB = -Viscosity * VertexB.Velocity;
-            //VertexA.Acceleration += elasticForceDir / Mass + viscousForceDirA / Mass;
-            //VertexB.Acceleration += -elasticForceDir / Mass + viscousForceDirB / Mass;
+            var elasticForceDir = elasticForce * positionDiffNorm;
+            var viscousForceDirA = -Viscosity * VertexA.Velocity;
+            var viscousForceDirB = -Viscosity * VertexB.Velocity;
+            VertexA.Acceleration += elasticForceDir / Mass + viscousForceDirA / Mass;
+            VertexB.Acceleration += -elasticForceDir / Mass + viscousForceDirB / Mass;
         }
     }
 }

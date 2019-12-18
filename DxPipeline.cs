@@ -139,13 +139,13 @@ namespace SoftBody
             VertexShader vertexShader;
             PixelShader pixelShader;
 
-            using (var vertexShaderByteCode = ShaderBytecode.CompileFromFile("../../vertexShader.hlsl", "main", "vs_5_0", ShaderFlags.Debug))
+            using (var vertexShaderByteCode = ShaderBytecode.CompileFromFile("../../vertexShader.hlsl", "main", "vs_5_0", ShaderFlags.None))
             {
                 inputSignature = ShaderSignature.GetInputSignature(vertexShaderByteCode);
                 vertexShader = new VertexShader(device, vertexShaderByteCode);
             }
 
-            using (var pixelShaderByteCode = ShaderBytecode.CompileFromFile("../../pixelShader.hlsl", "main", "ps_5_0", ShaderFlags.Debug))
+            using (var pixelShaderByteCode = ShaderBytecode.CompileFromFile("../../pixelShader.hlsl", "main", "ps_5_0", ShaderFlags.None))
             {
                 pixelShader = new PixelShader(device, pixelShaderByteCode);
             }
@@ -183,7 +183,10 @@ namespace SoftBody
             var timeDiff = now - lastComputeTime;
             lastComputeTime = now;
 
-            bezierCube.Update((float)timeDiff.TotalMilliseconds / 1000);
+            for (int i = 0; i < 100; i++)
+                bezierCube.Update((float)timeDiff.TotalMilliseconds / 100000);
+
+            //bezierCube.Update((float)timeDiff.TotalMilliseconds / 1000);
 
             bezierCube.Render(context, vsBuffer, this.vsBuffer);
             sphere.Render(context, vsBuffer, this.vsBuffer);
