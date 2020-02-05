@@ -74,7 +74,6 @@ namespace SoftBody
             {
                 var vec = Vector4.Transform(baseCubePositions[i], matrix);
                 Vertices[i].Position = new Vector3(vec.X, vec.Y, vec.Z);
-
             }
 
             var vertexArray = Vertices.Select(x => x.ToVertex).ToArray();

@@ -6,6 +6,11 @@
 	matrix projMatrix;
 };
 
+cbuffer buf2 : register(b1)
+{
+	float4 bezierPoints[64];
+};
+
 struct VSInput
 {
 	float3 pos : POSITION;

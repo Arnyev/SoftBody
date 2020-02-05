@@ -32,6 +32,13 @@
             set => Sphere.Draw = value;
         }
 
+        public bool DrawMesh
+        {
+            get => Mesh.Draw;
+            set => Mesh.Draw = value;
+        }
+
+
         public float DeformationConstant
         {
             get => BezierCube.DeformationConstant;

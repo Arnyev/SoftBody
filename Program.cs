@@ -1,4 +1,6 @@
-﻿using SharpDX.Windows;
+﻿using Assimp;
+using Assimp.Configs;
+using SharpDX.Windows;
 using System;
 using System.Windows.Forms;
 

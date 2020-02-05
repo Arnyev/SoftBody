@@ -20,6 +20,7 @@ namespace SoftBody
 
         uint[] triangleIndicesArray;
         Buffer triangleIndices;
+        Vertex[] triangleVertices;
 
         public Sphere(Device device, BezierCubeVertex[,,] bezierPoints)
         {
@@ -27,7 +28,7 @@ namespace SoftBody
 
             vertexBuffer = Buffer.Create(device, BindFlags.VertexBuffer, GetTriangleVertices());
             vertexBinding = new VertexBufferBinding(vertexBuffer, Utilities.SizeOf<Vertex>(), 0);
-
+            triangleVertices = GetTriangleVertices();
             triangleIndicesArray = GetIndices();
             triangleIndices = Buffer.Create(device, BindFlags.IndexBuffer, triangleIndicesArray);
         }
@@ -39,7 +40,7 @@ namespace SoftBody
 
             context.UpdateSubresource(ref cpuBuffer, vsBuffer);
 
-            context.UpdateSubresource(GetTriangleVertices(), vertexBuffer);
+            context.UpdateSubresource(triangleVertices, vertexBuffer);
 
             context.InputAssembler.PrimitiveTopology = PrimitiveTopology.TriangleList;
             context.InputAssembler.SetIndexBuffer(triangleIndices, Format.R32_UInt, 0);
@@ -81,34 +82,8 @@ namespace SoftBody
                 {
                     var z = cosa * cosinuses[indexV] / 2 + 0.5f;
                     var x = cosa * sinuses[indexV] / 2 + 0.5f;
-
-                    var point = new Vector3();
-                    for (int i = 0; i < 4; i++)
-                        for (int j = 0; j < 4; j++)
-                            for (int k = 0; k < 4; k++)
-                                point += bezierPoints[i, j, k].Position * GetBernsteinValue(i, x) * GetBernsteinValue(j, y) * GetBernsteinValue(k, z);
-
-                    vertices[indexU * SquareDivision + indexV] = new Vertex(point);
-                }
-            }
-
-            for (uint indexU = 0; indexU < SquareDivision; indexU++)
-            {
-                for (uint indexV = 0; indexV < SquareDivision; indexV++)
-                {
-                    var ind = indexU * SquareDivision + indexV;
-                    var v1 = vertices[ind].Position;
-                    var v2 = vertices[(ind + 1) % vertexCount].Position;
-                    var v3 = vertices[(ind + SquareDivision) % vertexCount].Position;
-                    var d1 = v2 - v1;
-                    var d2 = v3 - v1;
-                    var normal = Vector3.Normalize(Vector3.Cross(d1, d2));
-                    if (Math.Abs(normal.Length() - 1) > 1e-2)
-                    {
-                        int k = 4;
-                    }
-
-                    vertices[indexU * SquareDivision + indexV].Normal = normal;
+                    vertices[indexU * SquareDivision + indexV] = 
+                        new Vertex(new Vector3(x, y, z), Vector3.Normalize(new Vector3(x-0.5f, y - 0.5f, z - 0.5f)));
                 }
             }
 

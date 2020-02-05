@@ -29,8 +29,10 @@ namespace SoftBody
         BezierCube bezierCube;
         Sphere sphere;
         BoundingBox boundingBox;
+        Mesh mesh;
 
         DateTime lastComputeTime;
+        private VertexShader _vertexShader;
 
         public DxPipeline(Control control, Form1 form)
         {
@@ -55,6 +57,7 @@ namespace SoftBody
             bezierCube = new BezierCube(cube, device);
             boundingBox = new BoundingBox(device);
             sphere = new Sphere(device, bezierCube.bezierPoints);
+            mesh = new Mesh(device,context, bezierCube.bezierPoints);
             lastComputeTime = DateTime.Now;
         }
 
@@ -136,13 +139,12 @@ namespace SoftBody
         private void InitializeShaders()
         {
             ShaderSignature inputSignature;
-            VertexShader vertexShader;
             PixelShader pixelShader;
 
             using (var vertexShaderByteCode = ShaderBytecode.CompileFromFile("../../vertexShader.hlsl", "main", "vs_5_0", ShaderFlags.None))
             {
                 inputSignature = ShaderSignature.GetInputSignature(vertexShaderByteCode);
-                vertexShader = new VertexShader(device, vertexShaderByteCode);
+                _vertexShader = new VertexShader(device, vertexShaderByteCode);
             }
 
             using (var pixelShaderByteCode = ShaderBytecode.CompileFromFile("../../pixelShader.hlsl", "main", "ps_5_0", ShaderFlags.None))
@@ -150,7 +152,7 @@ namespace SoftBody
                 pixelShader = new PixelShader(device, pixelShaderByteCode);
             }
 
-            context.VertexShader.Set(vertexShader);
+            context.VertexShader.Set(_vertexShader);
             context.PixelShader.Set(pixelShader);
             context.InputAssembler.PrimitiveTopology = PrimitiveTopology.TriangleList;
             context.InputAssembler.InputLayout = new InputLayout(device, inputSignature, new InputElement[]
@@ -177,7 +179,6 @@ namespace SoftBody
             vsBuffer.InvView = Camera.InverseViewMatrix;
             vsBuffer.World = Matrix.Identity;
 
-            cube.Render(context, vsBuffer, this.vsBuffer);
 
             var now = DateTime.Now;
             var timeDiff = now - lastComputeTime;
@@ -187,10 +188,15 @@ namespace SoftBody
                 bezierCube.Update((float)timeDiff.TotalMilliseconds / 100000);
 
             //bezierCube.Update((float)timeDiff.TotalMilliseconds / 1000);
+            context.VertexShader.Set(_vertexShader);
+            cube.Render(context, vsBuffer, this.vsBuffer);
 
             bezierCube.Render(context, vsBuffer, this.vsBuffer);
-            sphere.Render(context, vsBuffer, this.vsBuffer);
             boundingBox.Render(context, vsBuffer, this.vsBuffer);
+
+            mesh.Render(context, vsBuffer, this.vsBuffer);
+            sphere.Render(context, vsBuffer, this.vsBuffer);
+
             swapChain.Present(1, PresentFlags.None);
         }
     }
